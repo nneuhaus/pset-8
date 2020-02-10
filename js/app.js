@@ -117,7 +117,15 @@ function getWinner() {
       board[condition[1]] === board[condition[2]]
     ) {
       winner = board[condition[0]];
-    }
+      if (winner === "X") {
+        xwon++;
+        document.getElementById("firstList").innerHTML = xwon
+      };
+      if (winner === "O") {
+        owon++;
+        document.getElementById("secondList").innerHTML = owon
+      };
+    };
   });
   return winner ? winner : board.includes("") ? null : "T";
 };
