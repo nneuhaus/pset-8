@@ -13,19 +13,35 @@ const winningConditions = [
 let board;
 let turn;
 let win;
-let scorex;
-let scoreo;
+let xwon = 0;
+let owon = 0;
+let tieScore = 0;
 ///////////////////// CACHED ELEMENT REFERENCES /////////////////////
 const squares = Array.from(document.querySelectorAll("#board div"))
 const message = document.querySelector("h2");
-const x = document.getElementById("x-score");
-const o = document.getElementById("o-score");
 ///////////////////// EVENT LISTENERS ///////////////////////////////
 window.onload = init;
+document.getElementById("firstX").onclick = firstX;
+document.getElementById("firstO").onclick = firstO;
 document.getElementById("board").onclick = takeTurn;
 document.getElementById("reset-button").onclick = init;
+document.getElementById("firstX").onclick = init2;
+document.getElementById("firstO").onclick = init3;
 ///////////////////// FUNCTIONS /////////////////////////////////////
 function init() {
+  board = [
+    "", "", "",
+    "", "", "",
+    "", "","",
+  ];
+
+  turn = turn;
+  win = null;
+
+  render();
+}
+
+function init2() {
   board = [
     "", "", "",
     "", "", "",
@@ -36,7 +52,31 @@ function init() {
   win = null;
 
   render();
+
+};
+
+function init3() {
+  board = [
+    "", "", "",
+    "", "", "",
+    "", "","",
+  ];
+  turn = "O"
+  win = null;
+
+  render();
 }
+
+function firstX(){
+  document.getElementById("change").innerHTML = "Turn: X";
+  turn = "X";
+
+};
+
+function firstO(){
+  document.getElementById("change").innerHTML = "Turn: O";
+  turn = "O";
+};
 
 function render() {
   board.forEach(function(mark, index) {
@@ -45,61 +85,6 @@ function render() {
 
   message.textContent =
     win === "T" ? "It's a tie!" : win ? `${win} wins!` : `Turn: ${turn}`;
-}
-
-function keepScore() {
-  if (getWinner()) {
-    if (turn === "X") {
-      x.textvalue = "X: " + xscore;
-      xscore++;
-    } else if (turn === "O") {
-      o.textvalue = "O: " + yscore;
-      oscore++;
-    }
-  }
-}
-
-function firstTurn() {
-    const whoIsFirst = document.getElementById("whosFirst");
-
-    var first = whoIsFirst.toLowerCase();
-
-    switch (first) {
-      case x:
-        message.textContent =
-          whoIsFirst === "Turn: X";
-        break;
-      case o:
-        message.textContent =
-          whoIsFirst === "Turn: O";
-        break;
-      default:
-        alert("Type in X or O to decide who goes first!");
-        break;
-    }
-}function takeTurn(e) {
-  let index = squares.findIndex(function(square) {
-    return square === e.target;
-  });
-  board[index] = turn;
-  turn = turn === "X" ? "O" : "X";
-
-  render();
-}
-
-function getWinner() {
-  let winner = null;
-
-  winningConditions.forEach(function(condition, index) {
-    if (
-      board[condition[0]] &&
-      board[condition[0]] === board[condition[1]] &&
-      board[condition[1]] === board[condition[2]]
-    ) {
-      winner = board[condition[0]];
-    }
-  });
-  return winner ? winner : board.includes("") ? null : "T";
 }
 
 function takeTurn(e) {
@@ -115,36 +100,24 @@ function takeTurn(e) {
 
       render();
     }
-  }
-}
-function keepScore() {
-  if (getWinner()) {
-    if (turn === "X") {
-      x.textvalue = "X: " + xscore;
-      xscore++;
-    } else if (turn === "O") {
-      o.textvalue = "O: " + yscore;
-      oscore++;
+    if (win === "T") {
+      tieScore++;
+      document.getElementById("thirdList").innerHTML = tieScore;
+    };
+  };
+};
+
+function getWinner() {
+  let winner = null;
+
+  winningConditions.forEach(function(condition, index) {
+    if (
+      board[condition[0]] &&
+      board[condition[0]] === board[condition[1]] &&
+      board[condition[1]] === board[condition[2]]
+    ) {
+      winner = board[condition[0]];
     }
-  }
-}
-
-function firstTurn() {
-    const whoIsFirst = document.getElementById("whosFirst");
-
-    var first = whoIsFirst.toLowerCase();
-
-    switch (first) {
-      case x:
-        message.textContent =
-          whoIsFirst === "Turn: X";
-        break;
-      case o:
-        message.textContent =
-          whoIsFirst === "Turn: O";
-        break;
-      default:
-        alert("Type in X or O to decide who goes first!");
-        break;
-    }
-}
+  });
+  return winner ? winner : board.includes("") ? null : "T";
+};
