@@ -13,9 +13,13 @@ const winningConditions = [
 let board;
 let turn;
 let win;
+let scorex;
+let scoreo;
 ///////////////////// CACHED ELEMENT REFERENCES /////////////////////
 const squares = Array.from(document.querySelectorAll("#board div"))
 const message = document.querySelector("h2");
+const x = document.getElementById("x-score");
+const o = document.getElementById("o-score");
 ///////////////////// EVENT LISTENERS ///////////////////////////////
 window.onload = init;
 document.getElementById("board").onclick = takeTurn;
@@ -43,20 +47,44 @@ function render() {
     win === "T" ? "It's a tie!" : win ? `${win} wins!` : `Turn: ${turn}`;
 }
 
-function takeTurn(e) {
-  if (!win) {
-    let index = squares.findIndex(function(square) {
-      return square === e.target;
-    });
-
-    if (board[index] === "") {
-      board[index] = turn;
-      turn = turn === "X" ? "O" : "X";
-      win = getWinner();
-
-      render();
+function keepScore() {
+  if (getWinner()) {
+    if (turn === "X") {
+      x.textvalue = "X: " + xscore;
+      xscore++;
+    } else if (turn === "O") {
+      o.textvalue = "O: " + yscore;
+      oscore++;
     }
   }
+}
+
+function firstTurn() {
+    const whoIsFirst = document.getElementById("whosFirst");
+
+    var first = whoIsFirst.toLowerCase();
+
+    switch (first) {
+      case x:
+        message.textContent =
+          whoIsFirst === "Turn: X";
+        break;
+      case o:
+        message.textContent =
+          whoIsFirst === "Turn: O";
+        break;
+      default:
+        alert("Type in X or O to decide who goes first!");
+        break;
+    }
+}function takeTurn(e) {
+  let index = squares.findIndex(function(square) {
+    return square === e.target;
+  });
+  board[index] = turn;
+  turn = turn === "X" ? "O" : "X";
+
+  render();
 }
 
 function getWinner() {
@@ -72,4 +100,51 @@ function getWinner() {
     }
   });
   return winner ? winner : board.includes("") ? null : "T";
+}
+
+function takeTurn(e) {
+  if (!win) {
+    let index = squares.findIndex(function(square) {
+      return square === e.target;
+    });
+
+    if (board[index] === "") {
+      board[index] = turn;
+      turn = turn === "X" ? "O" : "X";
+      win = getWinner();
+
+      render();
+    }
+  }
+}
+function keepScore() {
+  if (getWinner()) {
+    if (turn === "X") {
+      x.textvalue = "X: " + xscore;
+      xscore++;
+    } else if (turn === "O") {
+      o.textvalue = "O: " + yscore;
+      oscore++;
+    }
+  }
+}
+
+function firstTurn() {
+    const whoIsFirst = document.getElementById("whosFirst");
+
+    var first = whoIsFirst.toLowerCase();
+
+    switch (first) {
+      case x:
+        message.textContent =
+          whoIsFirst === "Turn: X";
+        break;
+      case o:
+        message.textContent =
+          whoIsFirst === "Turn: O";
+        break;
+      default:
+        alert("Type in X or O to decide who goes first!");
+        break;
+    }
 }
